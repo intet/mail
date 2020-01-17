@@ -16,7 +16,7 @@ const (
 )
 
 const topic = "mail.send"
-const errorTopic = "error_topic"
+const errorTopic = "mail.error"
 
 const DEFAULT_FILE = "mail.json"
 

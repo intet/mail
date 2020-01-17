@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 const topic = "mail.send"
-const errorTopic = "error_topic"
+const errorTopic = "mail.error"
 const workerCount = 3
 
 func main() {
