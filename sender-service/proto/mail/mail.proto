@@ -7,3 +7,7 @@ message Msg{
     bytes body = 4;
 }
 
+message ErrorMsg{
+    string Msg = 1;
+}
+
