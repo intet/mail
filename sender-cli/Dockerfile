@@ -15,4 +15,6 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY --from=builder /app/sender-cli/sender-cli .
+COPY mail.json /app/mail.json
+
 CMD ["./sender-cli"]

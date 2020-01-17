@@ -15,3 +15,6 @@
 
 .idea/
 go.sum
+
+
+sender-cli/mail.json

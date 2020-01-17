@@ -7,6 +7,8 @@ import (
 
 	"github.com/micro/go-micro"
 	"fmt"
+	"io/ioutil"
+	"encoding/json"
 )
 
 const (
@@ -14,7 +16,7 @@ const (
 )
 
 const topic = "mail.send"
-
+const DEFAULT_FILE = "mail.json"
 func main() {
 
 	// Set up a connection to the server.
@@ -30,7 +32,28 @@ func main() {
 		log.Fatalf("Could not publish mail: %v", err)
 	}
 
+	msg, err = parseFile(DEFAULT_FILE);
+	if err != nil {
+		log.Fatalf("Could not parse files: %v", err)
+	}
+
+	err = publisher.Publish(context.TODO(), msg)
+
+	if err != nil {
+		log.Fatalf("Could not publish mail: %v", err)
+	}
+
 	if err := srv.Run(); err != nil {
 		fmt.Println(err)
 	}
+}
+
+func parseFile(file string) (*pb.Msg, error) {
+	var consignment *pb.Msg
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+	json.Unmarshal(data, &consignment)
+	return consignment, err
 }
