@@ -16,7 +16,10 @@ const (
 )
 
 const topic = "mail.send"
+const errorTopic = "error_topic"
+
 const DEFAULT_FILE = "mail.json"
+
 func main() {
 
 	// Set up a connection to the server.
@@ -24,27 +27,28 @@ func main() {
 	srv.Init()
 
 	publisher := micro.NewPublisher(topic, srv.Client())
+	micro.RegisterSubscriber(errorTopic, srv.Server(), &handler{})
 
-	msg := &pb.Msg{From: "someone@mail.com", Password: "***", Hdrs: []string{"anotherOne"}, Body: []byte("Hello world")}
-	err := publisher.Publish(context.TODO(), msg)
-
-	if err != nil {
-		log.Fatalf("Could not publish mail: %v", err)
-	}
-
-	msg, err = parseFile(DEFAULT_FILE);
-	if err != nil {
-		log.Fatalf("Could not parse files: %v", err)
-	}
-
-	err = publisher.Publish(context.TODO(), msg)
-
-	if err != nil {
-		log.Fatalf("Could not publish mail: %v", err)
-	}
+	sendMail(publisher)
 
 	if err := srv.Run(); err != nil {
 		fmt.Println(err)
+	}
+}
+
+func sendMail(publisher micro.Publisher) {
+	msg := &pb.Msg{From: "someone@mail.com", Password: "***", Hdrs: []string{"anotherOne"}, Body: []byte("Hello world")}
+	err := publisher.Publish(context.TODO(), msg)
+	if err != nil {
+		log.Fatalf("Could not publish mail: %v", err)
+	}
+	msg, err = parseFile(DEFAULT_FILE)
+	if err != nil {
+		log.Fatalf("Could not parse files: %v", err)
+	}
+	err = publisher.Publish(context.TODO(), msg)
+	if err != nil {
+		log.Fatalf("Could not publish mail: %v", err)
 	}
 }
 

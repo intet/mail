@@ -6,6 +6,7 @@ import (
 	"fmt"
 )
 const topic = "mail.send"
+const errorTopic = "error_topic"
 
 func main()  {
 	srv := micro.NewService(
@@ -13,7 +14,9 @@ func main()  {
 	)
 	srv.Init()
 
-	micro.RegisterSubscriber(topic, srv.Server(), &handler{})
+	errorPublisher := micro.NewPublisher(errorTopic, srv.Client())
+
+	micro.RegisterSubscriber(topic, srv.Server(), &handler{mailService: &service{}, errorPublisher: errorPublisher})
 
 	if err := srv.Run(); err != nil {
 		fmt.Println(err)

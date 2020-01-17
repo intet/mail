@@ -16,5 +16,6 @@ services:
      depends_on:
         - sender-service
      environment:
+      MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
 
