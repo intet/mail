@@ -45,6 +45,7 @@ func sendMail(publisher micro.Publisher) {
 	msg, err = parseFile(DEFAULT_FILE)
 	if err != nil {
 		log.Fatalf("Could not parse files: %v", err)
+
 	}
 	err = publisher.Publish(context.TODO(), msg)
 	if err != nil {
@@ -53,11 +54,11 @@ func sendMail(publisher micro.Publisher) {
 }
 
 func parseFile(file string) (*pb.Msg, error) {
-	var consignment *pb.Msg
+	var mail *pb.Msg
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}
-	json.Unmarshal(data, &consignment)
-	return consignment, err
+	json.Unmarshal(data, &mail)
+	return mail, err
 }
