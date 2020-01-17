@@ -6,9 +6,8 @@ import (
 )
 
 type handler struct {
-
+	mailService service
 }
 func (h *handler) Process(ctx context.Context, msg *pb.Msg) error {
-
-	return nil
+	return h.mailService.sendMail(msg)
 }
